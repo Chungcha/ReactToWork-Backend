@@ -30,11 +30,13 @@ class JobsController < ApplicationController
     def remote
         response = RestClient.get("https://remoteok.io/api")
         jsonResponse=JSON.parse(response.body)
-        jsonResponse.drop(1).map do |obj| 
-            obj["link"] = obj.delete "url"
-            obj["category"] = obj.delete "tags"
+        jsonResponse.map do |obj|  
+                obj["link"] = obj.delete "url"
+                obj["category"] = obj.delete "tags"
         end
-        return jsonResponse.drop(1)
+        jsonResponse.drop(1).filter do |obj|
+            obj["category"].include?("react")
+        end
         # this drops a hash of words.
     end
 
