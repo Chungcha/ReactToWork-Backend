@@ -20,7 +20,7 @@ class JobsController < ApplicationController
         jobsArr = jsonResponse["rss"]["channel"]["item"]
         jobsArr.map do |obj|
             obj["company"] = obj["author"].delete "name"
-            obj["title"] = obj.delete "title"
+            obj["position"] = obj.delete "title"
             obj.delete "author"
             obj["date"] = obj.delete "pubDate"
         end
