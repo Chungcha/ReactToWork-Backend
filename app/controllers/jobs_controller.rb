@@ -1,13 +1,20 @@
 class JobsController < ApplicationController
 
-    def index
+    def index    
         city = params["search"]
-        allJobs = stackoverflowJobs(city) + self.remote
+        allJobs = self.getStackJobs(city) + self.remote
         # take out remote for a seperate remote fetch, this just adds up the array
         render json: allJobs
     end
 
-    def stackoverflowJobs(city)
+    def stackoverflowjobs
+        city = params["search"]
+        jobsArr = self.getStackJobs(city)
+        render json: jobsArr
+    end
+
+    def getStackJobs(city)
+        city = params["search"]
         s = Net::HTTP.get_response(URI.parse("https://stackoverflow.com/jobs/feed?q=react&l=#{city}")).body
         jsonResponse=JSON.parse(Hash.from_xml(s).to_json)
         jobsArr = jsonResponse["rss"]["channel"]["item"]
@@ -17,12 +24,8 @@ class JobsController < ApplicationController
             obj.delete "author"
             obj["date"] = obj.delete "pubDate"
         end
-        newArr = []
-        newArr.push(jobsArr[0])
-        # delete lines 20-23 to return all the info, this just returns an array of one element
-        return newArr
+        return jobsArr
     end
-
 
     def remote
         response = RestClient.get("https://remoteok.io/api")
