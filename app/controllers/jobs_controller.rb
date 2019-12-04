@@ -1,4 +1,6 @@
 class JobsController < ApplicationController
+    skip_before_action :authorized, only: [:stackoverflowjobs, :getStackJobs, :remote, :index]
+
 
     def index    
         city = params["search"]
