@@ -1,9 +1,13 @@
 class ApplicationController < ActionController::API
+  before_action :authorized
+
+  def secret_key
+    Rails.application.secrets.secret_key_base
+  end 
 
     def encode_token(payload)
         # payload => { beef: 'steak' }
-        JWT.encode(payload, ENV['oath_key'])
-        
+        JWT.encode(payload, secret_key)
       end
      
       def auth_header
@@ -16,13 +20,18 @@ class ApplicationController < ActionController::API
           token = auth_header.split(' ')[1]
           # headers: { 'Authorization': 'Bearer <token>' }
           begin
-            JWT.decode(token, ENV['oath_key'], true, algorithm: 'HS256')
+            JWT.decode(token, secret_key, true, algorithm: 'HS256')
             # JWT.decode => [{ "beef"=>"steak" }, { "alg"=>"HS256" }]
           rescue JWT::DecodeError
             nil
           end
         end
       end
+
+      def decode(token)
+        JWT.decode(token, secret_key, true, {algorithm: 'HS256'})[0]
+        #return OG payload
+    end 
 
         def current_user
             if decoded_token
