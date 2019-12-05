@@ -28,8 +28,8 @@ class ApplicationController < ActionController::API
           end
         end
       end
-    end
-  end
+    
+
 
   def decode(token)
     JWT.decode(token, secret_key, true, {algorithm: 'HS256'})[0]

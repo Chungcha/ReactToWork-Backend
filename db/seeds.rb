@@ -8,3 +8,4 @@
 
 User.destroy_all
 Job.destroy_all
+Save.destroy_all

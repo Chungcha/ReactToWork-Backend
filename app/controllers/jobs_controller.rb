@@ -41,7 +41,7 @@ class JobsController < ApplicationController
                     #     job.date = job_params[:date]
                     # end
 
-                     save = Save.find_or_create_by(user_id:user.id,job_id:job2.id)
+                     save = Save.find_or_create_by(saver_id:user.id,job_id:job2.id)
                     
                     render json: job2
 
