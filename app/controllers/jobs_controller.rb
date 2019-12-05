@@ -1,8 +1,27 @@
 class JobsController < ApplicationController
-    skip_before_action :authorized, only: [:stackoverflowjobs, :getStackJobs, :remote, :index]
+    skip_before_action :authorized, only: [:create, :stackoverflowjobs, :getStackJobs, :remote, :index]
+    #take out :create, anyone can make posts right now.
 
+    def create
+        job = Job.create(
+            company: job_params[:company], 
+            description: job_params[:description],
+            link: job_params[:link],
+            position: job_params[:position],
+            zipCode: job_params[:zipCode],
+            category: job_params[:category].split(" "),
+            date: DateTime.current 
+        )
+        render json: job
+    end
 
-    def index    
+    def destroy
+        job = Job.find(params[:id])
+        job.destroy
+        render json: {}, status: :no_content
+    end
+
+    def index
         city = params["search"]
         allJobs = self.getStackJobs(city) + self.remote
         # take out remote for a seperate remote fetch, this just adds up the array
@@ -42,5 +61,10 @@ class JobsController < ApplicationController
         # this drops a hash of words.
     end
 
+    private
+
+    def job_params
+        params.require(:job).permit(:position, :company, :link, :description, :zipCode, :category)
+    end
 
 end
