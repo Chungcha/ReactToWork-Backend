@@ -2,9 +2,9 @@ class User < ApplicationRecord
     has_many :saves, foreign_key: "saver_id", dependent: :destroy
     has_many :jobs, through: :saves, foreign_key: "saver_id"
 
-    has_many :jobs, foreign_key: "poster_id"
+    has_many :posts, class_name: "Job", foreign_key: "poster_id"
 
-    has_secure_password
+    has_secure_password  
     validates :username, uniqueness: { case_sensitive: false }
 
 
