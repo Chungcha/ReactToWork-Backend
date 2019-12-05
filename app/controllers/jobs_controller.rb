@@ -27,7 +27,7 @@ class JobsController < ApplicationController
                         job.position = job_params[:position],
                         job.zipCode = job_params[:zipCode],
                         job.category = job_params[:category].split(" "),
-                        job.date = DateTime.current
+                        job.date = job_params[:date]
                     end
 
                      save = Save.find_or_create_by(user_id:user.id,job_id:job.id)
@@ -98,7 +98,7 @@ class JobsController < ApplicationController
     private
 
     def job_params
-        params.require(:job).permit(:position, :company, :link, :description, :zipCode, :category)
+        params.require(:job).permit(:position, :company, :link, :description, :zipCode, :category, :date)
     end
 
 end
