@@ -4,5 +4,5 @@ Rails.application.routes.draw do
   resources :users, only: [:create, :delete, :update]
   get "/profile", to: "users#show"
   post '/login', to: 'auth#create'
-  resources :saves, only: [:create, :delete]
+  resources :saves, only: [:create, :delete, :index]
 end
