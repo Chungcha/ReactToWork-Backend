@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 2019_12_02_155105) do
   end
 
   create_table "saves", force: :cascade do |t|
-    t.integer "saver_id"
+    t.integer "user_id"
     t.integer "job_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
