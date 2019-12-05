@@ -22,6 +22,7 @@ class JobsController < ApplicationController
             elsif request.headers["Save"]
 
                 job2 = Job.find_or_create_by(
+
                     company: job_params[:company], 
                     description: job_params[:description],
                     link: job_params[:link],
@@ -31,6 +32,7 @@ class JobsController < ApplicationController
                     date:  job_params[:date]
                     )
 
+                    
 
                     # job2 = Job.find_or_create_by(link: job_params[:link]) do |job|
                     #     job.company = job_params[:company], 
