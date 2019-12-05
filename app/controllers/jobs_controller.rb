@@ -5,8 +5,7 @@ class JobsController < ApplicationController
     def create
         if current_user 
         user = current_user
-            if user[:admin] && !request.headers["Save"]
-                
+            if user[:admin] && request.headers["Save"]=="false"
                 job = Job.create(
                 company: job_params[:company], 
                 description: job_params[:description],
@@ -14,7 +13,8 @@ class JobsController < ApplicationController
                 position: job_params[:position],
                 zipCode: job_params[:zipCode],
                 category: job_params[:category],
-                date: DateTime.current 
+                date: DateTime.current,
+                poster_id: user.id
                 )
                 render json: job
 
