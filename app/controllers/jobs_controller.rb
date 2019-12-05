@@ -13,7 +13,7 @@ class JobsController < ApplicationController
                 link: job_params[:link],
                 position: job_params[:position],
                 zipCode: job_params[:zipCode],
-                category: job_params[:category].split(" "),
+                category: job_params[:category],
                 date: DateTime.current 
                 )
                 render json: job
@@ -21,18 +21,29 @@ class JobsController < ApplicationController
 
             elsif request.headers["Save"]
 
-                    job = Job.find_or_create_by(link: job_params[:link]) do |job|
-                        job.company = job_params[:company], 
-                        job.description = job_params[:description],
-                        job.position = job_params[:position],
-                        job.zipCode = job_params[:zipCode],
-                        job.category = job_params[:category].split(" "),
-                        job.date = job_params[:date]
-                    end
+                job2 = Job.find_or_create_by(
+                    company: job_params[:company], 
+                    description: job_params[:description],
+                    link: job_params[:link],
+                    position: job_params[:position],
+                    zipCode: job_params[:zipCode],
+                    category: job_params[:category],
+                    date:  job_params[:date]
+                    )
 
-                     save = Save.find_or_create_by(user_id:user.id,job_id:job.id)
-    
-                    render json: job
+
+                    # job2 = Job.find_or_create_by(link: job_params[:link]) do |job|
+                    #     job.company = job_params[:company], 
+                    #     job.description = job_params[:description],
+                    #     job.position = job_params[:position],
+                    #     job.zipCode = job_params[:zipCode],
+                    #     job.category = job_params[:category],
+                    #     job.date = job_params[:date]
+                    # end
+
+                     save = Save.find_or_create_by(user_id:user.id,job_id:job2.id)
+                    
+                    render json: job2
 
             else
                 render json: { message: "You're Not AN ADMIN!!!!!" }, status: :unauthorized
