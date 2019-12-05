@@ -1,24 +1,59 @@
 class JobsController < ApplicationController
-    skip_before_action :authorized, only: [:create, :stackoverflowjobs, :getStackJobs, :remote, :index]
+    skip_before_action :authorized, only: [:stackoverflowjobs, :getStackJobs, :remote, :index]
     #take out :create, anyone can make posts right now.
 
     def create
-        job = Job.create(
-            company: job_params[:company], 
-            description: job_params[:description],
-            link: job_params[:link],
-            position: job_params[:position],
-            zipCode: job_params[:zipCode],
-            category: job_params[:category].split(" "),
-            date: DateTime.current 
-        )
-        render json: job
+        if current_user 
+        user = current_user
+            if user[:admin] && !request.headers["Save"]
+                
+                job = Job.create(
+                company: job_params[:company], 
+                description: job_params[:description],
+                link: job_params[:link],
+                position: job_params[:position],
+                zipCode: job_params[:zipCode],
+                category: job_params[:category].split(" "),
+                date: DateTime.current 
+                )
+                render json: job
+
+
+            elsif request.headers["Save"]
+                
+                    job = Job.find_or_create_by(
+                    company: job_params[:company], 
+                    description: job_params[:description],
+                    link: job_params[:link],
+                    position: job_params[:position],
+                    zipCode: job_params[:zipCode],
+                    category: job_params[:category].split(" "),
+                    date: DateTime.current 
+                    )
+    
+                    save = Save.create(user_id:user.id,job_id:job.id)
+    
+                    render json: save
+
+            else
+                render json: { message: "You're Not AN ADMIN!!!!!" }, status: :unauthorized
+            end
+            
+        end
     end
 
     def destroy
-        job = Job.find(params[:id])
-        job.destroy
-        render json: {}, status: :no_content
+        if current_user 
+            user = current_user
+                if user[:admin] 
+                    job = Job.find(params[:id])
+                    job.destroy
+                    render json: {}, status: :no_content
+                else
+                    render json: { message: "You're Not AN ADMIN!!!!!" }, status: :unauthorized
+                end
+                
+            end
     end
 
     def index

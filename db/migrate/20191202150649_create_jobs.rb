@@ -6,7 +6,7 @@ class CreateJobs < ActiveRecord::Migration[6.0]
       t.string :link
       t.string :position
       t.string :zipCode
-      t.array :category
+      t.string :category
       t.datetime :date
       
       t.timestamps

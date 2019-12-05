@@ -16,8 +16,9 @@ class ApplicationController < ActionController::API
       end
      
       def decoded_token
+        
         if auth_header
-          token = auth_header.split(' ')[1]
+          token = auth_header
           # headers: { 'Authorization': 'Bearer <token>' }
           begin
             JWT.decode(token, secret_key, true, algorithm: 'HS256')
@@ -34,6 +35,7 @@ class ApplicationController < ActionController::API
     end 
 
         def current_user
+            
             if decoded_token
               # decoded_token=> [{"user_id"=>2}, {"alg"=>"HS256"}]
               # or nil if we can't decode the token
