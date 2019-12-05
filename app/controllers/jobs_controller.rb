@@ -20,18 +20,17 @@ class JobsController < ApplicationController
 
 
             elsif request.headers["Save"]
-                
-                    job = Job.find_or_create_by(
-                    company: job_params[:company], 
-                    description: job_params[:description],
-                    link: job_params[:link],
-                    position: job_params[:position],
-                    zipCode: job_params[:zipCode],
-                    category: job_params[:category].split(" "),
-                    date: DateTime.current 
-                    )
-    
-                    save = Save.create(user_id:user.id,job_id:job.id)
+
+                    job = Job.find_or_create_by(link: job_params[:link]) do |job|
+                        job.company = job_params[:company], 
+                        job.description = job_params[:description],
+                        job.position = job_params[:position],
+                        job.zipCode = job_params[:zipCode],
+                        job.category = job_params[:category].split(" "),
+                        job.date = DateTime.current
+                    end
+
+                     save = Save.find_or_create_by(user_id:user.id,job_id:job.id)
     
                     render json: save
 
