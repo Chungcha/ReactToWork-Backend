@@ -23,12 +23,13 @@ ActiveRecord::Schema.define(version: 2019_12_02_155105) do
     t.string "zipCode"
     t.string "category"
     t.datetime "date"
+    t.integer "poster_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "saves", force: :cascade do |t|
-    t.integer "user_id"
+    t.integer "saver_id"
     t.integer "job_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

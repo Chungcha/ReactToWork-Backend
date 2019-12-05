@@ -5,15 +5,15 @@ class ApplicationController < ActionController::API
     Rails.application.secrets.secret_key_base
   end 
 
-    def encode_token(payload)
-        # payload => { beef: 'steak' }
-        JWT.encode(payload, secret_key)
-      end
+  def encode_token(payload)
+    # payload => { beef: 'steak' }
+    JWT.encode(payload, secret_key)
+  end
      
-      def auth_header
-        # { 'Authorization': 'Bearer <token>' }
-        request.headers['Authorization']
-      end
+  def auth_header
+    # { 'Authorization': 'Bearer <token>' }
+    request.headers['Authorization']
+  end
      
       def decoded_token
         
@@ -28,11 +28,13 @@ class ApplicationController < ActionController::API
           end
         end
       end
+    
 
-      def decode(token)
-        JWT.decode(token, secret_key, true, {algorithm: 'HS256'})[0]
-        #return OG payload
-    end 
+
+  def decode(token)
+    JWT.decode(token, secret_key, true, {algorithm: 'HS256'})[0]
+    #return OG payload
+  end 
 
         def current_user
             
@@ -44,12 +46,12 @@ class ApplicationController < ActionController::API
             end
           end
          
-          def logged_in?
-            !!current_user
-          end
+  def logged_in?
+    !!current_user
+  end
 
-          def authorized
-            render json: { message: 'Please log in' }, status: :unauthorized unless logged_in?
-          end
+  def authorized
+    render json: { message: 'Please log in' }, status: :unauthorized unless logged_in?
+  end
 
 end

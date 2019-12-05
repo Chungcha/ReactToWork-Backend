@@ -1,7 +1,8 @@
 class SavesController < ApplicationController
 
     def create
-        save = Save.create(user_id:params[:user_id] , job_id:params[:job_id])
+        byebug
+        save = Save.create(saver_id:params[:user_id] , job_id:params[:job_id])
 
         render json: save
     end
