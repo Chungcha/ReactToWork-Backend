@@ -32,7 +32,7 @@ class JobsController < ApplicationController
 
                      save = Save.find_or_create_by(user_id:user.id,job_id:job.id)
     
-                    render json: save
+                    render json: job
 
             else
                 render json: { message: "You're Not AN ADMIN!!!!!" }, status: :unauthorized
