@@ -10,6 +10,6 @@ class SavesController < ApplicationController
         save = Save.find(params[:id])
         save.destroy
 
-        render json: save
+        render json: {message:"Save Destroyed"}
     end
 end
