@@ -1,5 +1,14 @@
 class UsersController < ApplicationController
-    skip_before_action :authorized, only: [:create, :show]
+    skip_before_action :authorized, only: [:create, :show, :validateUsername]
+
+    def validateUsername
+        user = User.find_by(username: params[:username])
+        if user
+            render json: {message: "name unavailable"}
+        else
+            render json: {message: "name available"}
+        end
+    end
 
     def create
         @user = User.create(user_params)

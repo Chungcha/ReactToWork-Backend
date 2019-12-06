@@ -70,14 +70,22 @@ class JobsController < ApplicationController
 
     def index
         city = params["search"]
-        allJobs = self.getStackJobs(city) + self.remote
+        zipCode = city.to_i
+        createdJobs = Job.where.not(poster_id: nil)
+        createdJobsResults = createdJobs.where(zipCode: (zipCode-50)...(zipCode+50))
+        allJobs = self.getStackJobs(city) + self.remote + createdJobsResults
         # take out remote for a seperate remote fetch, this just adds up the array
         render json: allJobs
     end
 
     def stackoverflowjobs
         city = params["search"]
-        jobsArr = self.getStackJobs(city)
+        zipCode = city.to_i
+
+        createdJobs = Job.where.not(poster_id: nil)
+        createdJobsResults = createdJobs.where(zipCode: (zipCode-50)...(zipCode+50))
+
+        jobsArr = self.getStackJobs(city) + createdJobsResults
         render json: jobsArr
     end
 
